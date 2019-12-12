@@ -102,6 +102,10 @@ inline MemoryBlock* GetMemoryBlock(Memory* memory) {
     return memory->allocators[memory->allocator_count];
 }
 
+inline MemoryBlock* GetMemoryBlockByIndex(Memory* memory, size_t index) {
+    return &memory->blocks[index];
+}
+
 void PushAllocator(Memory* memory, const char* label) {
     size_t key = GetKey(label, strlen(label)) % memory->count;
     MemoryBlock *block = &memory->blocks[key];
@@ -176,6 +180,15 @@ void ClearToZero(Memory* memory) {
 }
 
 #if MEMORY_HEADERS
+
+MemoryHeader* GetNextHeader(MemoryBlock* block, MemoryHeader* current) {
+    if (current) {
+        return (MemoryHeader*)((size_t)current->ptr + current->size);
+    } else {
+        return (MemoryHeader*)block->start;
+    }
+}
+
 MemoryHeader* GetNextHeader(Memory* memory, MemoryHeader* current) {
     if (current) {
         return (MemoryHeader*)((size_t)current->ptr + current->size);
@@ -184,4 +197,5 @@ MemoryHeader* GetNextHeader(Memory* memory, MemoryHeader* current) {
         return (MemoryHeader*)block->start;
     }
 }
+
 #endif
