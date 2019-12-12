@@ -41,13 +41,7 @@ struct MemoryHeader {
 bool InitMemoryBlock(MemoryBlock* block, size_t size)
 {
     block->size  = size;
-
-#if MEMORY_HEADERS
-    block->count = sizeof(MemoryHeader);
-#else
     block->count = 0;
-#endif
-
     block->allocations = 0;
     block->next  = nullptr;
     block->start = calloc(1, size);
